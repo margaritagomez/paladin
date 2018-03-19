@@ -1,22 +1,23 @@
 import React, { Component } from 'react';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
-import {clickProduct} from '../actions/act';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { clickProduct } from '../actions/act';
 
 class Products extends Component{
 
-    createListItems(){
+    createListItems = () => {
         return this.props.products.map((prod) => {
             return (
                 <li
                     key={prod.id}
                     onClick={()=>this.props.clickProduct(prod)}
                 >
-                    {prod.name}
+                    {prod.name} {' '}
+                    {prod.sublevel_id}
                 </li>
             );
         });
-    }
+    };
 
     render(){
         return(
