@@ -7,7 +7,9 @@
     "eslint": "^4.19.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
-    "react-scripts": "1.1.1"
+    "react-redux": "^5.0.7",
+    "react-scripts": "1.1.1",
+    "redux": "^3.7.2"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -15,6 +17,9 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
+  "presets": [
+    "env"
+  ],
   "eslintConfig": {
     "parser": "babel-eslint",
     "parserOptions": {
@@ -39,6 +44,8 @@
   },
   "devDependencies": {
     "babel-plugin-import": "^1.6.7",
-    "react-app-rewired": "^1.5.0"
+    "babel-preset-env": "^1.6.1",
+    "react-app-rewired": "^1.5.0",
+    "redux-devtools": "^3.4.1"
   }
 }
