@@ -36,6 +36,7 @@ const productsReducer = (state = products, action) => {
                     state.push(products[i]);
             }
             return state;
+
         default:
             return state
     }
@@ -49,9 +50,8 @@ const findSubCat = (sel, sub, arr) => {
             if (currSub.id === sel) {
                 checkSubCats(currSub, arr);
                 found = true;
-            } else {
+            } else
                 findSubCat(sel, currSub.sublevels, arr);
-            }
         }
     }
 

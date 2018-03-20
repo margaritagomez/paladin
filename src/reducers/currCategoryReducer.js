@@ -50,5 +50,4 @@ const findSubCat = (sel, sub, arr) => {
     }
 };
 
-
 export default currCategoryReducer;

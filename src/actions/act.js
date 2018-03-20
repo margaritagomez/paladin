@@ -18,3 +18,10 @@ export const clickSubCategory = (category) => {
         payload: category
     }
 };
+
+export const sortFilterProducts = (criteria) => {
+    return {
+        type: "SORT_FILTER_PRODUCTS",
+        payload: criteria
+    }
+};
