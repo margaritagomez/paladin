@@ -9,36 +9,45 @@ const productsReducer = (state = products, action) => {
             arr = {numbers:[]};
             const catSelectedS= action.payload;
             const catSelected = parseInt(catSelectedS, 10);
-            state = [];
             for (let c=0;c<categories.length ;c++) {
                 let currCat = categories[c];
                 findSubCat(catSelected, currCat.sublevels, arr);
-                let subcats = arr.numbers;
-                state = [];
-                for (let i=0;i<products.length;i++) {
-                    let done = false;
-                    for (let j=0;j<subcats.length && !done;j++) {
-                        if (products[i].sublevel_id === subcats[j]) {
-                            state.push(products[i]);
-                            done = true;
-                        }
-                    }
-                }
             }
-            return state;
+            let subcats = arr.numbers;
+            let newstate = [];
+            for (let i=0;i<products.length;i++) {
+                if (subcats.includes(products[i].sublevel_id))
+                    newstate.push(products[i]);
+            }
+            return newstate;
 
         case "CLICK_SUBCATEGORY":
             const currSubS= action.payload.key;
             const currSub = parseInt(currSubS, 10);
-            state = [];
+            let nState = [];
             for (let i=0;i<products.length;i++){
                 if (products[i].sublevel_id === currSub)
-                    state.push(products[i]);
+                    nState.push(products[i]);
             }
-            return state;
+            return nState;
+
+        case "FILTER_SEARCH":
+            console.log(action.payload);
+            return products.map((record) => {
+                const reg = action.payload;
+                const match = record.name.match(reg);
+                if (!match) {
+                    return null;
+                }
+                return {
+                    ...record,
+                    name: record.name
+                };
+            }).filter(record => !!record);
 
         default:
             return state
+
     }
 };
 

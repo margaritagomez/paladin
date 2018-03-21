@@ -1,24 +1,21 @@
 import categories from '../data/categories.json';
 
-let arr = {levels:[], found:false};
-
-const currCategoryReducer = (state = {levels:[]}, action) => {
+const currCategoryReducer = (state = {levels:[], found:false}, action) => {
     switch (action.type) {
         case "CLICK_CATEGORY":
-            arr = {levels:[], found:false};
+            let arr1 = {levels:[], found:false};
             const catSelectedS = action.payload;
             const catSelected = parseInt(catSelectedS, 10);
-            for (let c=0;c<categories.length && !arr.found;c++) {
+            for (let c=0;c<categories.length && !arr1.found;c++) {
                 let currCat = categories[c];
-                findSubCat(catSelected, currCat.sublevels, arr);
-                if(arr.found)
-                    arr.levels.unshift(currCat);
+                findSubCat(catSelected, currCat.sublevels, arr1);
+                if(arr1.found)
+                    arr1.levels.unshift(currCat);
             }
-            state = arr;
-            return state;
+            return arr1;
 
         case "CLICK_SUBCATEGORY":
-            arr = {levels:[], found:false};
+            let arr = {levels:[], found:false};
             const currSubS = action.payload.key;
             const currSub = parseInt(currSubS, 10);
             for (let c=0;c<categories.length && !arr.found;c++) {
@@ -27,8 +24,12 @@ const currCategoryReducer = (state = {levels:[]}, action) => {
                 if(arr.found)
                     arr.levels.unshift(currCat);
             }
-            state = arr;
-            return state;
+            return arr;
+
+        case "NO_CATEGORY":
+            let arr2 = {levels:[], found:false};
+            return arr2;
+
         default:
             return state
     }
