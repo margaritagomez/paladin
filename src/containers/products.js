@@ -1,8 +1,16 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { clickProduct, sortFilterProducts } from '../actions/act';
-import { Table, Button } from 'antd';
+import {
+    clickProduct,
+    searchProducts,
+    sortFilterProducts,
+    setDropdownVisibility,
+    setFiltered,
+    filterSearch,
+    noCategory
+} from '../actions/act';
+import { Table, Input, Button, Icon } from 'antd';
 
 class Products extends Component{
 
@@ -20,21 +28,33 @@ class Products extends Component{
         });
     };
 
+    /*
+    * Handles changes in filters and sorters
+    */
     handleChange = (pagination, filters, sorter) => {
-        console.log('Various parameters', filters, sorter);
+        //console.log('Various parameters', filters, sorter);
         this.props.sortFilterProducts({
             filteredInfo: filters,
             sortedInfo: sorter
         });
     };
 
+    /*
+    * Clears all existing filters and sorters
+    */
     clearAll = () => {
         this.props.sortFilterProducts({
             filteredInfo: {},
             sortedInfo: {}
         });
+        const reg = new RegExp('', 'gi');
+        this.props.filterSearch(reg);
+        this.props.noCategory();
     };
 
+    /*
+    * Defines price sorter by changing String price values to Integers
+    */
     sortPrice = (a, b) => {
         const aPriceNoSign = a.price.substring(1);
         const bPriceNoSign = b.price.substring(1);
@@ -45,6 +65,9 @@ class Products extends Component{
         return aPrice - bPrice;
     };
 
+    /*
+    * Checks if price is between given values
+    */
     checkPrice = (strRange, item) => {
         const priceNoSign = item.price.substring(1);
         const priceNoComma = priceNoSign.replace(',','');
@@ -56,6 +79,9 @@ class Products extends Component{
         return (priceNum>=range[0] && priceNum<range[1]);
     };
 
+    /*
+    * Checks if quantity is between given values
+    */
     checkQuantity = (strRange, item) => {
         const quant = item.quantity;
         const arrRange = strRange.split(',');
@@ -63,6 +89,9 @@ class Products extends Component{
         return (quant>=range[0] && quant<range[1]);
     };
 
+    /*
+    * Checks if item is available
+    */
     checkAvailability = (value, item) => {
         let av = "false";
         if (item.available)
@@ -70,15 +99,51 @@ class Products extends Component{
         return av === value;
     };
 
+    /*
+    * Returns rendering value according to availability
+    */
     showAvailability = (av) => {
         return (av) ? <p> In Stock </p> : <p> Not Available </p>;
+    };
+
+    onInputChange = (e) => {
+        this.props.searchProducts(e.target.value);
+    };
+
+    onSearch = () => {
+        const searchText  = this.props.search.searchText;
+        const reg = new RegExp(searchText, 'gi');
+
+        this.props.setDropdownVisibility(false);
+        this.props.setFiltered(!!searchText);
+        this.props.filterSearch(reg);
     };
 
     render(){
         const columns = [{
             title: 'Name',
             dataIndex: 'name',
-            key: 'name'
+            key: 'name',
+            filterDropdown: (
+                <div className="custom-filter-dropdown">
+                    <Input
+                        ref={ele => this.searchInput = ele}
+                        placeholder="Search name"
+                        value={this.props.search.searchText}
+                        onChange={this.onInputChange}
+                        onPressEnter={this.onSearch}
+                    />
+                    <Button type="primary" onClick={this.onSearch}>Search</Button>
+                </div>
+            ),
+            filterIcon: <Icon type="search" style={{ color: this.props.search.filtered ? '#108ee9' : '#aaa' }} />,
+            filterDropdownVisible: this.props.search.filterDropdownVisible,
+            onFilterDropdownVisibleChange: (visible) => {
+                this.props.setDropdownVisibility(visible)
+                this.setState({
+                    filterDropdownVisible: visible,
+                }, () => this.searchInput && this.searchInput.focus());
+            }
         }, {
             title: 'Price',
             dataIndex: 'price',
@@ -125,7 +190,7 @@ class Products extends Component{
         return(
             <div>
                 <div>
-                    <Button onClick={this.clearAll}>Clear filters and sorters</Button>
+                    <Button onClick={this.clearAll}>Clear filters and sorters </Button>
                 </div>
                 <Table columns={columns} dataSource={this.props.products} onChange={this.handleChange} rowKey={record => record.id}/>
                 <ul>
@@ -139,14 +204,20 @@ class Products extends Component{
 const mapStateToProps = (state) => {
     return{
         products: state.products,
-        sortFilter: state.sortFilter
+        sortFilter: state.sortFilter,
+        search: state.search
     }
 };
 
 const matchDispatchToProps = (dispatch) => {
     return bindActionCreators({
         clickProduct: clickProduct,
-        sortFilterProducts: sortFilterProducts
+        sortFilterProducts: sortFilterProducts,
+        searchProducts: searchProducts,
+        setDropdownVisibility: setDropdownVisibility,
+        setFiltered: setFiltered,
+        filterSearch : filterSearch,
+        noCategory: noCategory
     }, dispatch)
 };
 

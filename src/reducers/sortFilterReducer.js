@@ -1,6 +1,3 @@
-//import products from '../data/products.json';
-//import categories from '../data/categories.json';
-
 const sortFilterReducer = (state = {filteredInfo:{}, sortedInfo:{}}, action) => {
     switch (action.type) {
 
