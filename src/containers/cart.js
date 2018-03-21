@@ -24,7 +24,12 @@ class Cart extends Component{
             title: 'Delete',
             render: (record) => {
                 return (
-                    <Button type="danger" icon="delete" onClick={()=>this.props.deleteFromCart(record)} ghost>
+                    <Button
+                        type="danger"
+                        icon="delete"
+                        onClick={()=>this.props.deleteFromCart(record)}
+                        ghost
+                    >
                         Delete
                     </Button>);
             },
@@ -35,8 +40,14 @@ class Cart extends Component{
         if (this.props.cart.length > 0)
             cartB = (
                 <div>
-                    <div>
-                        <Button onClick={() => this.props.buyCart()}> Buy all products </Button>
+                    <div className="btBuy">
+                        <Button
+                            onClick={() => this.props.buyCart()}
+                            type="primary"
+                            size="large"
+                        >
+                            Buy all products
+                        </Button>
                     </div>
                     <Table columns={columns} dataSource={this.props.cart} rowKey={() => this.setKey()}/>
                 </div>
@@ -44,7 +55,7 @@ class Cart extends Component{
             );
         else
             cartB = (
-                <div>
+                <div className="textNoProd">
                     There are no products in the cart
                 </div>
             );

@@ -15,7 +15,7 @@ class App extends Component {
         let bodyApp = {};
         if (this.props.app) {
             bodyApp = (
-                <div>
+                <div className="body">
                     <Cart/>
                 </div>
             );
@@ -23,7 +23,7 @@ class App extends Component {
             bodyApp = (
                 <div>
                     <BreadcrumbCat />
-                    <div style={{ background: '#fff', padding: 24, minHeight: 280 }}>
+                    <div className="body" >
                         <Products/>
                     </div>
                 </div>
@@ -34,10 +34,10 @@ class App extends Component {
 
             <div className="App">
                 <Layout className="layout">
-                    <Header>
+                    <Header className="head">
                         <TopMenu/>
                     </Header>
-                    <Content style={{ padding: '0 50px' }}>
+                    <Content className="content">
                         { bodyApp }
                     </Content>
                     <Footer style={{ textAlign: 'center' }}>

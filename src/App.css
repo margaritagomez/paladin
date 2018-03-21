@@ -40,3 +40,41 @@
     padding: 0 1em;
 }
 
+/* Fonts */
+
+.head {
+    font-family: 'Francois One', sans-serif;
+    font-size: 1.2em;
+}
+
+.content {
+    padding: 0 3em;
+}
+
+.bread {
+    margin: 2em 0;
+}
+
+.body {
+    background: #fff;
+    padding: 24px;
+    min-height: 280px;
+}
+
+/* Products */
+.btClear {
+    text-align: center;
+    padding-bottom: 2em;
+}
+
+/* Cart */
+.btBuy {
+    text-align: center;
+    padding-bottom: 2em;
+}
+
+.textNoProd {
+    text-align: center;
+    padding-top: 2em;
+    font-size: 2em;
+}

@@ -178,10 +178,15 @@ class Products extends Component{
 
         return(
             <div>
-                <div>
+                <div className="btClear">
                     <Button onClick={this.clearAll}>Clear filters and sorters </Button>
                 </div>
-                <Table columns={columns} dataSource={this.props.products} onChange={this.handleChange} rowKey={record => record.id}/>
+                <Table
+                    columns={columns}
+                    dataSource={this.props.products}
+                    onChange={this.handleChange}
+                    rowKey={record => record.id}
+                />
             </div>
         );
     }

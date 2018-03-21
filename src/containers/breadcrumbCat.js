@@ -18,7 +18,7 @@ class BreadcrumbCat extends Component {
 
     render() {
         return(
-            <Breadcrumb style={{ margin: '16px 0' }}>
+            <Breadcrumb className="head bread" style={{ margin: '16px 0' }}>
                 { this.showActualCategory() }
             </Breadcrumb>
         );
