@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Menu, Dropdown, Icon } from 'antd';
-import { clickCategory, clickSubCategory } from '../actions/act';
+import { Menu, Dropdown, Icon, Button } from 'antd';
+import {clickCategory, clickSubCategory, showCart} from '../actions/act';
 
 const SubMenu = Menu.SubMenu;
 
@@ -18,7 +18,7 @@ class TopMenu extends Component{
                     <SubMenu
                         title={subl2.name}
                         key={subl2.id}
-                        onTitleClick={()=>this.props.clickCategory(subl2.id)}
+                        onTitleClick={()=>this.show('cat',subl2.id)}
                     >
                         {this.listSubcat2(subl2)}
                     </SubMenu>
@@ -44,7 +44,7 @@ class TopMenu extends Component{
                     <SubMenu
                         title={subl1.name}
                         key={subl1.id}
-                        onTitleClick={()=>this.props.clickCategory(subl1.id)}
+                        onTitleClick={()=>this.show('cat',subl1.id)}
                     >
                         {this.listSubcat2(subl1)}
                     </SubMenu>
@@ -62,7 +62,7 @@ class TopMenu extends Component{
 
     eachCat = (cat) => {
         return (
-            <Menu onClick={(key)=>this.props.clickSubCategory(key)}>
+            <Menu onClick={(key)=>this.show('sub',key)}>
                 {this.listSubcat(cat)}
             </Menu>
         );
@@ -81,14 +81,35 @@ class TopMenu extends Component{
                         {cat.name} <Icon type="down" />
                     </a>
                 </Dropdown>
+
             );
         });
+    };
+
+    cartNumber = () => {
+        return this.props.cart.length;
+    };
+
+    show = (subOrCat, param) => {
+        if (subOrCat==='cat'){
+            this.props.clickCategory(param);
+        } else {
+            this.props.clickSubCategory(param);
+        }
+        if (this.props.app)
+            this.props.showCart();
     };
 
     render(){
         return(
             <div>
                 {this.listCategories()}
+                <Button
+                    type="primary"
+                    icon="shopping-cart"
+                    className="cartBt"
+                    onClick={() => this.props.showCart()}
+                > {this.cartNumber()} </Button>
             </div>
         );
     }
@@ -96,12 +117,18 @@ class TopMenu extends Component{
 
 const mapStateToProps = (state) => {
     return{
-        categories: state.categories
+        categories: state.categories,
+        cart: state.cart,
+        app: state.app
     }
 };
 
 const matchDispatchToProps = (dispatch) => {
-    return bindActionCreators({clickSubCategory: clickSubCategory, clickCategory: clickCategory}, dispatch)
+    return bindActionCreators({
+        clickSubCategory: clickSubCategory,
+        clickCategory: clickCategory,
+        showCart: showCart
+    }, dispatch)
 };
 
 export default connect(mapStateToProps, matchDispatchToProps)(TopMenu);

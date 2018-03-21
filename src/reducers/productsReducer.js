@@ -32,18 +32,20 @@ const productsReducer = (state = products, action) => {
             return nState;
 
         case "FILTER_SEARCH":
-            console.log(action.payload);
-            return products.map((record) => {
-                const reg = action.payload;
-                const match = record.name.match(reg);
-                if (!match) {
-                    return null;
-                }
-                return {
-                    ...record,
-                    name: record.name
-                };
-            }).filter(record => !!record);
+            const reg = action.payload;
+            const strReg = reg.toString();
+            if (strReg!=='/(?:)/gi')
+                return state.map((record) => {
+                    const match = record.name.match(reg);
+                    if (!match) {
+                        return null;
+                    }
+                    return {
+                        ...record,
+                        name: record.name
+                    };
+                }).filter(record => !!record);
+            else return products;
 
         default:
             return state

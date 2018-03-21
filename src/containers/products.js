@@ -14,20 +14,6 @@ import { Table, Input, Button, Icon } from 'antd';
 
 class Products extends Component{
 
-    createListItems = () => {
-        return this.props.products.map((prod) => {
-            return (
-                <li
-                    key={prod.id}
-                    onClick={()=>this.props.clickProduct(prod)}
-                >
-                    {prod.name} {' '}
-                    {prod.sublevel_id}
-                </li>
-            );
-        });
-    };
-
     /*
     * Handles changes in filters and sorters
     */
@@ -139,10 +125,7 @@ class Products extends Component{
             filterIcon: <Icon type="search" style={{ color: this.props.search.filtered ? '#108ee9' : '#aaa' }} />,
             filterDropdownVisible: this.props.search.filterDropdownVisible,
             onFilterDropdownVisibleChange: (visible) => {
-                this.props.setDropdownVisibility(visible)
-                this.setState({
-                    filterDropdownVisible: visible,
-                }, () => this.searchInput && this.searchInput.focus());
+                this.props.setDropdownVisibility(visible);
             }
         }, {
             title: 'Price',
@@ -185,6 +168,12 @@ class Products extends Component{
             onFilter: (value, record) => this.checkAvailability(value, record),
             sorter: (a, b) => a.available - b.available,
             sortOrder: this.props.sortFilter.sortedInfo.columnKey === 'available' && this.props.sortFilter.sortedInfo.order
+        }, {
+            title: 'Buy',
+            render: (record) => {
+                return <Button type="primary" onClick={()=>this.props.clickProduct(record)} ghost>Buy</Button>
+            },
+            key: 'buy'
         }];
 
         return(
@@ -193,9 +182,6 @@ class Products extends Component{
                     <Button onClick={this.clearAll}>Clear filters and sorters </Button>
                 </div>
                 <Table columns={columns} dataSource={this.props.products} onChange={this.handleChange} rowKey={record => record.id}/>
-                <ul>
-                    {this.createListItems()}
-                </ul>
             </div>
         );
     }

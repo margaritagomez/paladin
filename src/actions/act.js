@@ -60,3 +60,24 @@ export const noCategory = () => {
         payload: ''
     }
 };
+
+export const showCart = () => {
+    return {
+        type: "SHOW_CART",
+        payload: ''
+    }
+};
+
+export const deleteFromCart = (product) => {
+    return {
+        type: "DELETE_FROM_CART",
+        payload: product
+    }
+};
+
+export const buyCart = () => {
+    return {
+        type: "BUY_CART",
+        payload: ''
+    }
+};
