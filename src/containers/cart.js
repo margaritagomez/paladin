@@ -36,7 +36,7 @@ class Cart extends Component{
             cartB = (
                 <div>
                     <div>
-                        <Button onClick={this.props.buyCart()}> Buy all products </Button>
+                        <Button onClick={() => this.props.buyCart()}> Buy all products </Button>
                     </div>
                     <Table columns={columns} dataSource={this.props.cart} rowKey={() => this.setKey()}/>
                 </div>
