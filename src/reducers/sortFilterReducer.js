@@ -4,7 +4,10 @@ const sortFilterReducer = (state = {filteredInfo:{}, sortedInfo:{}}, action) => 
         case "SORT_FILTER_PRODUCTS":
             //Sort products
             const sortFilters = action.payload;
-            state = {filteredInfo:sortFilters.filteredInfo, sortedInfo:sortFilters.sortedInfo};
+            state = {
+                filteredInfo:sortFilters.filteredInfo,
+                sortedInfo:sortFilters.sortedInfo
+            };
             return state;
 
         default:
