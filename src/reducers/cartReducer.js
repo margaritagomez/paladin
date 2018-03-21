@@ -1,10 +1,11 @@
-const cartReducer = (state = [], action) => {
+const cartReducer = (state = (JSON.parse(localStorage.getItem('carroo')) || []), action) => {
     switch (action.type) {
         case "CLICK_PRODUCT":
-            return [
-                ...state,
-                action.payload
-            ];
+            console.log( localStorage.getItem('carroo'));
+            console.log('payload type ', typeof action.payload);
+            const nState = [...state, action.payload];
+            localStorage.setItem('carroo', JSON.stringify(nState));
+            return nState;
 
         case "DELETE_FROM_CART":
             const toDelete = action.payload;
@@ -12,10 +13,13 @@ const cartReducer = (state = [], action) => {
             const ind = newArr.indexOf(toDelete);
             if (ind > -1)
                 newArr.splice(ind, 1);
+            localStorage.setItem('carroo', JSON.stringify(newArr));
             return newArr;
 
         case "BUY_CART":
-            return [];
+            const emptyArr = [];
+            localStorage.setItem('carroo', JSON.stringify(emptyArr));
+            return emptyArr;
 
         default:
             return state
