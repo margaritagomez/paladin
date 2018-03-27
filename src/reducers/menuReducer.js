@@ -1,4 +1,4 @@
-const menuReducer = (state = {showing:false, menuMode: ''}, action) => {
+const menuReducer = (state = {showing:false, menuMode: 'horizontal'}, action) => {
     switch (action.type) {
         case "MENU_VISIBILITY":
             const newSh = !state.showing;
