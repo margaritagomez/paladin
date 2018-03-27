@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
 import appReducer from './appReducer';
+import menuReducer from './menuReducer';
 import productsReducer from './productsReducer';
 import categoriesReducer from './categoriesReducer';
 import cartReducer from './cartReducer';
@@ -9,6 +10,7 @@ import searchReducer from './searchReducer';
 
 const allReducers = combineReducers({
     app: appReducer,
+    menu: menuReducer,
     products: productsReducer,
     categories: categoriesReducer,
     cart: cartReducer,
