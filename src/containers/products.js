@@ -173,7 +173,9 @@ class Products extends Component{
             render: (record) => {
                 return <Button type="primary" onClick={()=>this.props.clickProduct(record)} ghost>Buy</Button>
             },
-            key: 'buy'
+            key: 'operation',
+            fixed: 'right',
+            width: 100
         }];
 
         return(
@@ -186,6 +188,7 @@ class Products extends Component{
                     dataSource={this.props.products}
                     onChange={this.handleChange}
                     rowKey={record => record.id}
+                    scroll={{ x: 650 }}
                 />
             </div>
         );

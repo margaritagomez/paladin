@@ -33,7 +33,9 @@ class Cart extends Component{
                         Delete
                     </Button>);
             },
-            key: 'delete'
+            key: 'delete',
+            fixed: 'right',
+            width: 100
         }];
 
         let cartB = {};
@@ -49,7 +51,12 @@ class Cart extends Component{
                             Buy all products
                         </Button>
                     </div>
-                    <Table columns={columns} dataSource={this.props.cart} rowKey={() => this.setKey()}/>
+                    <Table
+                        columns={columns}
+                        dataSource={this.props.cart}
+                        rowKey={() => this.setKey()}
+                        scroll={{ x: 600 }}
+                    />
                 </div>
 
             );

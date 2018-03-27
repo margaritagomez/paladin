@@ -1,37 +1,29 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Menu, Dropdown, Icon, Button } from 'antd';
-import {clickCategory, clickSubCategory, showCart} from '../actions/act';
+import { Menu, Icon, Popover } from 'antd';
+import Media from 'react-media';
+import {
+    clickCategory, clickSubCategory, showCart, menuVisibility, menuModeHorizontal,
+    menuModeInline
+} from '../actions/act';
 
 const SubMenu = Menu.SubMenu;
 
-class TopMenu extends Component{
+class TopMenu extends Component {
 
+    componentWillMount () {
+        this.checkSize();
+    }
 
-    listSubcat2 = (subl1) => {
-        return subl1.sublevels.map((subl2) => {
-            // Traverses second sublevels
-            let sublevels3 = subl2.sublevels;
-            if (sublevels3) {
-                return (
-                    <SubMenu
-                        title={subl2.name}
-                        key={subl2.id}
-                        onTitleClick={()=>this.show('cat',subl2.id)}
-                    >
-                        {this.listSubcat2(subl2)}
-                    </SubMenu>
-                );
-            }
-            else {
-                return (
-                    <Menu.Item key={subl2.id}>
-                        {subl2.name}
-                    </Menu.Item>
-                );
-            }
-        });
+    componentDidMount () {
+        window.onresize = this.checkSize;
+    }
+
+    checkSize = () => {
+        if (window.innerWidth<671)
+            this.props.menuModeInline();
+        else this.props.menuModeHorizontal();
     };
 
     listSubcat = (cat) => {
@@ -46,7 +38,7 @@ class TopMenu extends Component{
                         key={subl1.id}
                         onTitleClick={()=>this.show('cat',subl1.id)}
                     >
-                        {this.listSubcat2(subl1)}
+                        {this.listSubcat(subl1)}
                     </SubMenu>
                 );
             }
@@ -60,57 +52,68 @@ class TopMenu extends Component{
         });
     };
 
-    eachCat = (cat) => {
-        return (
-            <Menu onClick={(key)=>this.show('sub',key)}>
-                {this.listSubcat(cat)}
-            </Menu>
-        );
-    };
-
     listCategories = () => {
         return this.props.categories.map((cat) => {
             return (
-                <Dropdown
-                    theme="dark"
-                    mode="horizontal"
-                    overlay = {this.eachCat(cat)}
+                <SubMenu
+                    title={cat.name}
                     key={cat.id}
                 >
-                    <a className="ant-dropdown-link">
-                        {cat.name} <Icon type="down" />
-                    </a>
-                </Dropdown>
+                    {this.listSubcat(cat)}
+                </SubMenu>
 
             );
         });
     };
 
-    cartNumber = () => {
-        return this.props.cart.length;
-    };
-
     show = (subOrCat, param) => {
-        if (subOrCat==='cat'){
+        if (subOrCat==='cat')
             this.props.clickCategory(param);
-        } else {
+        else if (subOrCat==='sub' && param.key!=='cart')
             this.props.clickSubCategory(param);
-        }
-        if (this.props.app)
+        if (this.props.app || param.key==='cart')
             this.props.showCart();
     };
 
     render(){
-        return(
-            <div>
+        const menu = (
+            <Menu className="topmenu" theme="dark" mode={this.props.menu.menuMode} onClick={(key)=>this.show('sub',key)}>
                 {this.listCategories()}
-                <Button
-                    type="primary"
-                    icon="shopping-cart"
-                    className="cartBt"
-                    onClick={() => this.props.showCart()}
-                > {this.cartNumber()} </Button>
-            </div>
+                <Menu.Item key="cart">
+                    <Icon type="shopping-cart" /> Shopping cart ({this.props.cart.length})
+                </Menu.Item>
+            </Menu>
+        );
+
+        return(
+            <Media query="(max-width: 670px)">
+                {
+                    matches => {
+                        if (matches) {
+                            return (
+                                <Popover
+                                    overlayClassName="popover-menu"
+                                    placement="bottomLeft"
+                                    content={menu}
+                                    trigger="click"
+                                    visible={this.props.menu.showing}
+                                    arrowPointAtCenter
+                                >
+                                    <Icon
+                                        style={{color: '#FFF'}}
+                                        type="menu-unfold"
+                                        onClick={() => this.props.menuVisibility()}
+                                    />
+                                </Popover>
+                            );
+                        } else {
+                            return menu;
+                        }
+
+                    }
+                }
+            </Media>
+
         );
     }
 }
@@ -119,7 +122,8 @@ const mapStateToProps = (state) => {
     return{
         categories: state.categories,
         cart: state.cart,
-        app: state.app
+        app: state.app,
+        menu: state.menu
     }
 };
 
@@ -127,7 +131,10 @@ const matchDispatchToProps = (dispatch) => {
     return bindActionCreators({
         clickSubCategory: clickSubCategory,
         clickCategory: clickCategory,
-        showCart: showCart
+        showCart: showCart,
+        menuVisibility: menuVisibility,
+        menuModeHorizontal: menuModeHorizontal,
+        menuModeInline: menuModeInline
     }, dispatch)
 };
 

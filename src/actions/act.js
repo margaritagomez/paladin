@@ -81,3 +81,24 @@ export const buyCart = () => {
         payload: ''
     }
 };
+
+export const menuVisibility = () => {
+    return {
+        type: "MENU_VISIBILITY",
+        payload: ''
+    }
+};
+
+export const menuModeHorizontal = () => {
+    return {
+        type: "MENU_MODE_HORIZONTAL",
+        payload: ''
+    }
+};
+
+export const menuModeInline = () => {
+    return {
+        type: "MENU_MODE_INLINE",
+        payload: ''
+    }
+};
